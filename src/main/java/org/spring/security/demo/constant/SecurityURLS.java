@@ -16,7 +16,7 @@ public class SecurityURLS {
             "/swagger-ui/**",
             "/swagger-ui/index.html",
             "/api/auth/**"
-
+//            ,"/api/tasks/**"
     );
 
     public static boolean isPublic(String path) {
