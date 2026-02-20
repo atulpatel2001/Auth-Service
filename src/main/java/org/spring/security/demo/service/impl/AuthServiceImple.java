@@ -3,10 +3,7 @@ package org.spring.security.demo.service.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.spring.security.demo.constant.SecurityConstants;
-import org.spring.security.demo.dto.AuthResponse;
-import org.spring.security.demo.dto.AuthUserDto;
-import org.spring.security.demo.dto.LoginRequest;
-import org.spring.security.demo.dto.RegisterUserRequest;
+import org.spring.security.demo.dto.*;
 import org.spring.security.demo.exception.BusinessException;
 import org.spring.security.demo.exception.ResourceNotFoundException;
 import org.spring.security.demo.model.EPermission;
@@ -19,6 +16,7 @@ import org.spring.security.demo.repository.jpa.UserRepository;
 import org.spring.security.demo.service.AuthService;
 import org.spring.security.demo.util.ApplicationUtil;
 import org.spring.security.demo.util.JwtUtil;
+import org.spring.security.demo.util.SecurityContextUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -111,6 +109,20 @@ public class AuthServiceImple  implements AuthService {
             refreshTokenRepository.findByTokenHash(refreshToken).ifPresent(refreshTokenRepository::delete);
         }
 
+    }
+
+    @Override
+    public UserProfileResponse getUserProfile() {
+        Long userId = SecurityContextUtil.getUserId();
+        EUser user = userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Set<String> roles = user.getRoles().stream().map(ERole::getName).collect(Collectors.toSet());
+
+        Set<String> permissions = user.getRoles().stream().flatMap(role -> role.getPermissions().stream())
+                .map(EPermission::getCode).collect(Collectors.toSet());
+
+        return new UserProfileResponse(user.getId(), user.getPhoneNumber(), user.getEmail(), roles, permissions);
     }
 
 

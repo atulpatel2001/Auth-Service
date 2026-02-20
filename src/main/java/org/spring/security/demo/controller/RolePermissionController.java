@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/role-permission")
+@RequestMapping("/api/admin")
 @Validated
 @RequiredArgsConstructor
 public class RolePermissionController {
@@ -71,7 +71,7 @@ public class RolePermissionController {
                 .build();
     }
 
-    @PostMapping("/remove")
+    @PostMapping("/role/remove")
     @PreAuthorize("hasAuthority('ROLE_PERMISSION_REMOVE')")
     public ApiResponse<Void> removePermission(
             @Valid @RequestBody ApiRequest<RemoveRolePermissionRequest> request) {

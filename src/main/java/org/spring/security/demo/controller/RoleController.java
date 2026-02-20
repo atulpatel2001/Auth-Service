@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/admin/user")
+@RequestMapping("/api/admin/role")
 @Validated
 @RequiredArgsConstructor
-public class AdminUserController {
+public class RoleController {
 
     private final UserService userService;
 
