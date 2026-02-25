@@ -12,9 +12,9 @@ public interface AuthService {
     AuthResponse login(LoginRequest dto);
 
     Long registerUser(RegisterUserRequest request);
-    AuthResponse refreshToken(String refreshTokenString, HttpServletRequest headerRequest);
+    AuthResponse refreshToken(String refreshTokenString);
 
-    void logout(HttpServletRequest headerRequest, String refreshToken);
+    void logout(String refreshToken);
 
     UserProfileResponse getUserProfile();
 }

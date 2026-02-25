@@ -83,20 +83,23 @@ public class AuthServiceImple  implements AuthService {
 
 
     @Override
-    public AuthResponse refreshToken(String refreshTokenString, HttpServletRequest headerRequest) {
+    public AuthResponse refreshToken(String refreshTokenString) {
+
+        if (refreshTokenString == null)
+            throw new BusinessException("Session Expired!", HttpStatus.UNAUTHORIZED);
 
         if(!jwtUtil.validateJwtToken(refreshTokenString))
-            throw new BusinessException("Refresh token is invalid", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("Session Expired!", HttpStatus.UNAUTHORIZED);
 
         ERefreshToken refreshToken = refreshTokenRepository.findByTokenHash(refreshTokenString)
-                .orElseThrow(() -> new BusinessException("Refresh token is invalid", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new BusinessException("Session Expired!", HttpStatus.UNAUTHORIZED));
 
         if (refreshToken.getRevokedAt() != null || refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new BusinessException("Refresh token is invalid", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("Session Expired!", HttpStatus.UNAUTHORIZED);
         }
 
         EUser user = userRepository.findById(refreshToken.getUserId())
-                .orElseThrow(() -> new BusinessException("Refresh token is invalid", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new BusinessException("Session Expired!", HttpStatus.UNAUTHORIZED));
 
 
 
@@ -104,11 +107,10 @@ public class AuthServiceImple  implements AuthService {
     }
 
     @Override
-    public void logout(HttpServletRequest headerRequest, String refreshToken) {
+    public void logout(String refreshToken) {
         if (!ApplicationUtil.isEmpty(refreshToken)) {
             refreshTokenRepository.findByTokenHash(refreshToken).ifPresent(refreshTokenRepository::delete);
         }
-
     }
 
     @Override

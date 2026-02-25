@@ -26,10 +26,24 @@ public class GlobalExceptionHandler {
 
         Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors()
+       /* ex.getBindingResult().getFieldErrors()
                 .forEach(err ->
                         errors.put(err.getField(), err.getDefaultMessage())
                 );
+*/
+
+        ex.getBindingResult().getFieldErrors()
+                .forEach(err -> {
+
+                    String field = err.getField();
+
+                    // Remove "data." prefix if exists
+                    if (field.contains(".")) {
+                        field = field.substring(field.lastIndexOf(".") + 1);
+                    }
+
+                    errors.put(field, err.getDefaultMessage());
+                });
 
         return ResponseEntity.badRequest().body(
                 ApiResponse.<ErrorResponse>builder()
@@ -48,7 +62,7 @@ public class GlobalExceptionHandler {
 
     /* ---------------- BUSINESS ---------------- */
 
-    @ExceptionHandler(BusinessException.class)
+/*    @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleBusinessException(
             BusinessException ex) {
 
@@ -64,7 +78,28 @@ public class GlobalExceptionHandler {
                         )
                         .build()
         );
-    }
+    }*/
+@ExceptionHandler(BusinessException.class)
+public ResponseEntity<ApiResponse<ErrorResponse>> handleBusinessException(
+        BusinessException ex) {
+
+    return ResponseEntity
+            .status(ex.getStatus())
+            .body(
+                    ApiResponse.<ErrorResponse>builder()
+                            .success(false)
+                            .message(ex.getMessage())
+                            .data(
+                                    ErrorResponse.builder()
+                                            .errorCode(ex.getStatus().toString())
+                                            .message(ex.getMessage())
+                                            .build()
+                            )
+                            .build()
+            );
+}
+
+
 
     /* ---------------- NOT FOUND ---------------- */
 

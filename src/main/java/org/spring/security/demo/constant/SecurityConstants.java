@@ -16,6 +16,8 @@ public class SecurityConstants {
     public final String TOKEN_USER_PERMISSIONS = "permissions";
     public final String BREAR = "Brear";
     public final String DEFAULT_ROLE= "USER";
+    public final String ACCESS_TOKEN = "access_token";
+    public final String REFRESH_TOKEN = "refresh_token";
 
 }
 

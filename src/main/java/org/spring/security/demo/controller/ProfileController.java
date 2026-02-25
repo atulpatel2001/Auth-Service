@@ -18,7 +18,7 @@ public class ProfileController {
 
     private final AuthService authService;
 
-    @PostMapping("/profile")
+    @PostMapping("/me")
     public ApiResponse<UserProfileResponse> getCurrentUser() {
         return ApiResponse.<UserProfileResponse>builder()
                 .success(true)

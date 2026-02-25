@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("access_tokens")
+@RedisHash("refresh_tokens")
 public class ERefreshToken implements Serializable {
 
 	@Serial
@@ -30,6 +31,7 @@ public class ERefreshToken implements Serializable {
     private UUID id;
     private Long userId;
 //	private String sessionId;
+    @Indexed
 	private String tokenHash;
     private LocalDateTime expiresAt;
     private LocalDateTime revokedAt;

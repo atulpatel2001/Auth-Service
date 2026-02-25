@@ -24,7 +24,7 @@ public class RoleController {
 
 
 
-    // ✅ ASSIGN ROLE
+    //ASSIGN ROLE
     @PostMapping("/assign-role")
     @PreAuthorize("hasAuthority('ASSIGN_ROLE')")
     public ApiResponse<Void> assignRole(
@@ -38,7 +38,7 @@ public class RoleController {
                 .build();
     }
 
-    // ✅ REMOVE ROLE
+    // REMOVE ROLE
     @PostMapping("/remove-role")
     @PreAuthorize("hasAuthority('REMOVE_ROLE')")
     public ApiResponse<Void> removeRole(
