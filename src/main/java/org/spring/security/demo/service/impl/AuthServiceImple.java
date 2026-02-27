@@ -75,7 +75,7 @@ public class AuthServiceImple  implements AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BusinessException("Invalid credentials", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("Invalid credentials", HttpStatus.BAD_REQUEST);
         }
 
         return generateTokens(user);
