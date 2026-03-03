@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 @Validated
@@ -82,6 +84,18 @@ public class RolePermissionController {
         return ApiResponse.<Void>builder()
                 .success(true)
                 .message("Permission removed from role successfully")
+                .build();
+    }
+
+
+    @PostMapping("/role/list")
+    @PreAuthorize("hasAuthority('ROLE_VIEW')")
+    public ApiResponse<List<RolePermissionResponse>> getRoles() {
+
+        return ApiResponse.<List<RolePermissionResponse>>builder()
+                .success(true)
+                .message("Role fetched successfully")
+                .data(service.getAllRolesWithPermissions())
                 .build();
     }
 }

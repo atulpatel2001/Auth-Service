@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -104,7 +105,11 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                 .permissions(
                         role.getPermissions()
                                 .stream()
-                                .map(EPermission::getCode)
+                                .map(permission -> PermissionDto.builder()
+                                        .id(permission.getId())
+                                        .code(permission.getCode())
+                                        .description(permission.getDescription())
+                                        .build())
                                 .collect(Collectors.toSet())
                 )
                 .build();
@@ -130,5 +135,13 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
         role.getPermissions().remove(permission);
         roleRepository.save(role);
+    }
+
+    @Override
+    public List<RolePermissionResponse> getAllRolesWithPermissions() {
+         List<ERole> allByIsDeletedFalse = this.roleRepository.findAllByIsDeletedFalse();
+            return allByIsDeletedFalse.stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
     }
 }

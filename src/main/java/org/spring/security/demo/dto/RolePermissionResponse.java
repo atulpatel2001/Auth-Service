@@ -13,5 +13,5 @@ public class RolePermissionResponse {
 
     private Long roleId;
     private String roleName;
-    private Set<String> permissions;
+    private Set<PermissionDto> permissions;
 }
