@@ -102,6 +102,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return RolePermissionResponse.builder()
                 .roleId(role.getId())
                 .roleName(role.getName())
+                .description(role.getDescription())
                 .permissions(
                         role.getPermissions()
                                 .stream()
